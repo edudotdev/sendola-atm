@@ -1,16 +1,12 @@
 'use client';
-
-import { useEffect } from "react";
+import { useGetUser } from "@/hooks";
 
 export default function Home() {
-
-  useEffect(() => {
-    fetch('http://localhost:3000/api')
-      .then(res => res.json())
-      .then(data => console.log(data.data))
-  }, []);
-
+  const [ user ] = useGetUser()
+  console.log(user, 'user')
   return (
-    <h1>Hello world!</h1>
+    <div>
+      {user && <h1>Hello {user.name}</h1>}
+    </div>
   );
 }
