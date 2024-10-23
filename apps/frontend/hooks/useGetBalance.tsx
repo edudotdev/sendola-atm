@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-type Name = {
-  name: string;
+type Balance = {
+  balance: number;
 }
 
-export function useGetUser() {
-  const [user, setUser] = React.useState<Name>()
+export function useGetBalance() {
+  const [balance, setBalance] = React.useState<Balance>()
   const router = useRouter()
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/', {
+    fetch('http://localhost:3000/api/balance', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -25,14 +25,12 @@ export function useGetUser() {
         return res.json()
       }) 
       .then(data => {
-        setUser(data.data)
+        setBalance(data.data)
       })
       .catch(error => {
         console.log(error)
       })
   }, [])
   
-  return [user]
+  return [balance]
 }
-
-export default useGetUser;
