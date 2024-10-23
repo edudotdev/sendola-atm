@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import "./globals.css";
+
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`antialiased`}
+        className={`${jakarta.className} bg-slate-50`}
       >
-        {children}
+          <div className="max-w-5xl mx-auto sm:mt-3">
+            {children}
+          </div>
       </body>
     </html>
   );
