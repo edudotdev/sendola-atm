@@ -33,15 +33,18 @@ db.run(`
     transaction_type TEXT
   )`)
 
-// table transactions
+
 db.run(`
-  CREATE TABLE IF NOT EXISTS transactions (
+   CREATE TABLE IF NOT EXISTS transactions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     transaction_type TEXT,
-    amount NUMERIC(10, 2), 
+    amount NUMERIC(10, 2),
     date TEXT,
-    FOREIGN KEY(transaction_type) REFERENCES transaction_types(transaction_type)
-  )`)
+    card_id INTEGER,
+    FOREIGN KEY(transaction_type) REFERENCES transaction_types(transaction_type),
+    FOREIGN KEY(card_id) REFERENCES cards(id) -- Relación con el id de la tabla cards
+  )
+`)
 
   // // data 
   // db.run(`
@@ -68,10 +71,26 @@ db.run(`
   // `)
 
   // db.run(`
-  //   INSERT INTO transactions (transaction_type, amount, date) 
+  //   INSERT INTO transactions (transaction_type, amount, date, card_id)  
   //   VALUES 
-  //     ('checkBalance', 0.00, '2024-10-19T10:30:00Z'),  -- John Doe checked balance
-  //     ('withdraw', 100.00, '2024-10-19T11:00:00Z'),    -- John Doe withdrew 100
-  //     ('withdraw', 50.00, '2024-10-19T12:00:00Z'),     -- Jane Smith withdrew 50
-  //     ('checkBalance', 0.00, '2024-10-19T13:00:00Z')   -- Alex Johnson checked balance
+  //     ('checkBalance', 0.00, '2024-10-19T10:30:00Z', '1'),  
+  //     ('withdraw', 100.00, '2024-10-19T11:00:00Z', '1'),   
+  //     ('withdraw', 50.00, '2024-10-19T12:00:00Z', '2'),    
+  //     ('checkBalance', 0.00, '2024-10-19T13:00:00Z, '2'')  
+  //     ('withdraw', 50.00, '2024-10-19T14:00:00Z', '3'),    
+  //     ('checkBalance', 0.00, '2024-10-19T15:00:00Z, '3'') 
+  // `)
+
+  // db.run(`
+  //   INSERT INTO transactions (transaction_type, amount, date, card_id) VALUES 
+  //   ('withdraw', 100.00, '2024-10-22 10:00:00', 1), 
+  //   ('checkBalance', 0.00, '2024-10-22 11:00:00', 1), 
+  //   ('withdraw', 200.00, '2024-10-22 12:00:00', 2), 
+  //   ('checkBalance', 0.00, '2024-10-22 13:00:00', 2), 
+  //   ('withdraw', 300.00, '2024-10-22 14:00:00', 3), 
+  //   ('checkBalance', 0.00, '2024-10-22 15:00:00', 3);
+  // `);
+
+  // db.run(`
+  //   UPDATE balances SET balance = 10000.00 WHERE card_id = 2;
   // `)
