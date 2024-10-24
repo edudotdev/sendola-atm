@@ -47,7 +47,7 @@ export class ATM {
     })
   }
 
-  static getTransactions(id) {
+  static getTransactionsByCardId(id) {
     return new Promise((resolve, reject) => {
       db.all(`SELECT * FROM transactions WHERE card_id = ?`, [id], (err, rows) => {
         if (err || !rows) {

@@ -79,14 +79,14 @@ export class ATMController {
     }
   }
 
-  static trasactionByCardId = async (req, res) => {
+  static trasactionsByCardId = async (req, res) => {
     const { card } = req.session
     // console.log(card.id, 'id')
-    await ATM.getTransactions(card.id)
+    await ATM.getTransactionsByCardId(card.id)
       .then(transactions => {
         res.status(200).json({
           status: 'success',
-          data: transactions
+          data: transactions.reverse()
         })
       })
   }
