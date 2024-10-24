@@ -1,14 +1,12 @@
-import React from 'react';
-import { Login } from '@/components/molecules';
+import React from 'react'
+import { Logo } from '@/components/atoms'
+import { LoginForm } from '@/components/molecules'
 
-function LoginPage() {
+export default function LoginPage() {
   return (
-    <div>
-      <h1>Login</h1>
-      <p>Login page</p>
-      <Login />
+    <div className='flex flex-col items-center space-y-8 mt-10'>
+      <Logo variant='dark' width={240} />
+      <LoginForm />
     </div>
-  );
+  )
 }
-
-export default LoginPage;

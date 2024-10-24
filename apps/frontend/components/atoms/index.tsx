@@ -1,2 +1,5 @@
 export * from './Logo'
 export * from './BackPage'
+export * from './PinInput'
+export * from './Error'
+export * from './Spinner'

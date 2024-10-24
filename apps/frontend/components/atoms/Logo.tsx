@@ -1,7 +1,17 @@
 import React from 'react'
 
-export const Logo = () => {
+interface Props {
+  variant?: 'light' | 'dark'
+  width?: number
+}
+
+export const Logo = ({
+  variant = 'light',
+  width = 150
+}: Props) => {
+  const src = variant === 'light' ? '/images/logo.png' : '/images/logo2.png'
+  
   return (
-    <img src="/images/logo.png" alt="sendola logo" width={150} />
+    <img src={src} alt="sendola logo" width={width} />
   )
 }
