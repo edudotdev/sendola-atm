@@ -1,12 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
-
-type Transaction = {
-  id: number
-  trasactionType: 'withdraw' | 'checkBalance'
-  amount: number
-  date: string
-}
+import { Transaction } from '@/types'
 
 export function useGetTransactions() {
   const router = useRouter()
