@@ -57,7 +57,7 @@ export class ATMController {
     const { card } = req.session
     try {
       const balance = await ATM.getBalance(card.id)
-      console.log(balance, 'balance')
+      const name = await ATM.getName(card.id)
 
       await ATM.addTransaction({
           transaction_type: 'checkBalance',
@@ -69,7 +69,7 @@ export class ATMController {
       return res.status(200).json({
           status: 'success',
           message: 'Balance retrieved successfully',
-          data: balance
+          data: { balance, card_number: card.card_number, name }
       })
     } catch (error) {
         return res.status(500).json({
