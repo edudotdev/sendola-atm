@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-type Balance = {
-  balance: number;
+type CardBalance = {
+  balance: number
+  card_number: string
+  name: string
 }
 
 export function useGetBalance() {
-  const [balance, setBalance] = React.useState<Balance>()
+  const [CardBalance, setCardBalance] = React.useState<CardBalance>()
   const router = useRouter()
 
   useEffect(() => {
@@ -25,12 +27,12 @@ export function useGetBalance() {
         return res.json()
       }) 
       .then(data => {
-        setBalance(data.data)
+        setCardBalance(data.data)
       })
       .catch(error => {
         console.log(error)
       })
   }, [])
   
-  return [balance]
+  return { CardBalance }
 }
