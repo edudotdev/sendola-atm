@@ -1,7 +1,7 @@
 import React from 'react'
-import { DateFormat } from '@/components/atoms'
 import { Transaction } from '@/types/index'
 import { CircleDollarSign, MoveDownLeft } from 'lucide-react'
+import { formatDate } from '@/utils/utils'
 
 interface Props {
   transaction: Transaction
@@ -10,8 +10,6 @@ interface Props {
 export const TransactionCard = ({
   transaction
 }: Props) => {
-
-  console.log(transaction)
   return (
     <div className='flex justify-between bg-white border border-slate-200 p-3 rounded-xl shadow-sm'>
       <div className='flex items-center gap-3'>
@@ -24,7 +22,7 @@ export const TransactionCard = ({
         <div className='space-y-1'>
           <p className='font-semibold text-slate-700'>ATM</p>
           <p className="text-sm text-slate-500 font-semibold">
-            <DateFormat date={transaction.date} />
+            {formatDate(transaction.date)}
           </p>
         </div>
       </div>
