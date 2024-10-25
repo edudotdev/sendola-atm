@@ -4,53 +4,55 @@ import jwt from 'jsonwebtoken'
 export class ATMController {
   static login = async (req, res) => {
     const { cardNumber, pin } = req.body
-    console.log(cardNumber, pin)
-    await ATM.findCard(cardNumber, pin)
-      .then(card => {
-        // console.log(card, 'card')
-        const token = jwt.sign({ 
-          card_number: card.card_number, 
-          id: card.id,
-          name: card.name
-        }, 'secret', {
-          expiresIn: '1h'
-        })
 
-        res.cookie('access_token', token, {
-          httpOnly: true,
-          secure: false,
-          sameSite: 'lax',
-          maxAge: 1000 * 60 * 60,
-          path: '/'
-        })
-
-        res.status(200).json({
-          status: 'success',
-          message: 'Login successful',
-          data: card,
-          token
-        })
-
+    try {
+      const card = await ATM.findCard(cardNumber, pin);
+      
+      const token = jwt.sign({ 
+        card_number: card.card_number, 
+        id: card.id,
+        name: card.name
+      }, 'secret', {
+        expiresIn: '1h'
       })
-      .catch(error => res.status(401).json({
-        "status": "error",
-        "message": error
-      }))
+    
+      res.cookie('access_token', token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        maxAge: 1000 * 60 * 60,
+        path: '/'
+      });
+    
+      res.status(200).json({
+        status: 'success',
+        message: 'Login successful',
+        data: card,
+        token
+      });
+    
+    } catch (error) {
+      res.status(401).json({
+        status: 'error',
+        message: error
+      })
+    }
   }
 
-  static index = async (req, res) => {
+  static name = async (req, res) => {
     const { card } = req.session
-      await ATM.getName(card.id)
-        .then(name => {
-          res.status(200).json({
-            status: 'success',
-            data: { name }
-          })
-        })
-        .catch(error => res.status(401).send({
-          status: 'error',
-          message: error
-        }))
+    try {
+      const name = await ATM.getName(card.id)
+      res.status(200).json({
+        status: 'success',
+        data: { name }
+      })
+    } catch (error) {
+      res.status(401).send({
+        status: 'error',
+        message: error
+      })
+    }
   }
 
   static checkBalance = async (req, res) => {
@@ -69,26 +71,31 @@ export class ATMController {
       return res.status(200).json({
           status: 'success',
           message: 'Balance retrieved successfully',
-          data: { balance, card_number: card.card_number, name }
+          data: { balance, card_number: card.card_number.slice(-4), name }
       })
     } catch (error) {
         return res.status(500).json({
             status: 'error',
             message: 'Error retrieving balance or recording transaction'
-        });
+        })
     }
   }
 
   static trasactionsByCardId = async (req, res) => {
     const { card } = req.session
-    // console.log(card.id, 'id')
-    await ATM.getTransactionsByCardId(card.id)
-      .then(transactions => {
-        res.status(200).json({
-          status: 'success',
-          data: transactions.reverse()
-        })
+
+    try {
+      const transactions = await ATM.getTransactionsByCardId(card.id)
+      res.status(200).json({
+        status: 'success',
+        data: transactions.reverse()
       })
+    } catch (error) {
+      res.status(401).send({
+        status: 'error',
+        message: error
+      })
+    }
   }
 
   static withdraw = async (req, res) => {
@@ -103,9 +110,9 @@ export class ATMController {
           message: 'Insufficient balance'
         })
       }
-      console.log(balance, 'balance', amount, 'amount')
-      const newBalane = balance - amount
-      console.log(newBalane, 'newBalane')
+      const newBalance = balance - amount
+
+      await ATM.updateBalance(card.id, newBalance)
 
       await ATM.addTransaction({
         transaction_type: 'withdraw',
@@ -114,12 +121,10 @@ export class ATMController {
         card_id: card.id
       })
 
-      await ATM.updateBalance(card.id, newBalane)
-      console.log(newBalane, 'newBalane')
       return res.status(200).json({
         status: 'success',
         message: 'Withdraw successful',
-        data: newBalane
+        data: newBalance
       })
     } catch (error) {
       return res.status(500).json({
@@ -127,5 +132,14 @@ export class ATMController {
         message: 'Error withdrawing'
       })
     }
+  }
+
+  static logout = async (_req, res) => {
+    res.setHeader('Set-Cookie', 'access_token=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax;');
+    
+    res.status(200).json({
+      status: 'success',
+      message: 'Logged out successfully'
+    })
   }
 }

@@ -9,7 +9,6 @@ export const authMiddleware = (req, res, next) => {
     }
     try {
         const data = jwt.verify(token, JWT_SECRET)
-        console.log(data, 'data')
         req.session.card = data
     } catch (error) {
         return res.status(401).json({ message: 'Invalid token' })
