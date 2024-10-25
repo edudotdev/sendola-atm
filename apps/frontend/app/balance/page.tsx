@@ -19,16 +19,16 @@ export default function BalancePage() {
       <div className='space-y-8 mx-auto flex flex-col items-center justify-center'>
         <div className='text-center space-y-3'>
           <h2 className='text-slate-600'>Your balance</h2>
-          {CardBalance?.balance ? 
-            <p className='text-5xl font-semibold'>
-              ${formatMoney(CardBalance.balance+'')}
+          {CardBalance?.balance ?
+            <p className='text-slate-700 text-5xl font-semibold'>
+              ${formatMoney(CardBalance?.balance.toString())}
             </p> : <div className='h-[48px]'></div>
           }
         </div>
         <DebitCardUI name={CardBalance?.name} />
         <p className='text-slate-700 flex gap-2 text-2xl font-semibold'>
-          <p className='translate-y-1.5'>****  ****  ****</p>
-         {CardBalance?.card_number.slice(-4)}
+          <span className='translate-y-1.5'>****  ****  ****</span>
+          {CardBalance?.card_number}
         </p>
       </div>
     </div>

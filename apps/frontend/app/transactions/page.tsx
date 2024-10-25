@@ -6,7 +6,7 @@ import { useGetTransactions } from '@/hooks'
 
 export default function TransactionPage() {
   const [transactions] = useGetTransactions()
-  console.log(transactions)
+
   return (
     <div className='px-3 py-6 space-y-10'>
       <header className='flex justify-between items-center'>
