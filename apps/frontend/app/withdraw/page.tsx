@@ -1,27 +1,25 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { BackPage } from '@/components/atoms'
-import { useWithdraw } from '@/hooks';
+import { Withdraw } from '@/components/organisms'
+import { ModalWithdraw } from '@/components/molecules'
 
 export default function WithdrawPage() {
-  const [amount, setAmount] = useState<number>(0)
-  const { withdrawHandler, loading, error } = useWithdraw(amount)
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseFloat(e.target.value))
-    if(e.target.value === '') return
-  }
+  const [showModal, setShowModal] = useState(false)
+  const [newBalance, setNewBalance] = useState(0)
 
   return (
-    <div>
-      <BackPage href='/' />
+    <>
+    <div className='px-3 py-6 space-y-8'>
+      <header className='flex justify-between items-center'>
+        <BackPage href='/' />
+        <h1 className='text-lg sm:text-2xl font-semibold'>Withdraw</h1>
+        <span className='w-[32px]'></span>
+      </header>
+      <Withdraw setShowModal={setShowModal} setNewBalance={setNewBalance} />
 
-      <h1 className='mb-10'>Withdraw</h1>
-      <input type="number" onChange={handleChange} value={amount} />
-      <button onClick={withdrawHandler} disabled={amount === 0}>
-        {loading ? 'Processing...' : 'Button Withdraw'}
-      </button>
-      {error && <p>{error}</p>}
     </div>
-  );
+      {showModal && <ModalWithdraw newBalance={newBalance} />}
+    </>
+  )
 }
