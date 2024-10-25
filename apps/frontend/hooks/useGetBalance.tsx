@@ -12,26 +12,24 @@ export function useGetBalance() {
   const router = useRouter()
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/balance', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include'
-    })
-      .then(res => {
-       if (res.status === 401) {
-         router.push('/login')
-         return
-       }
-        return res.json()
-      }) 
-      .then(data => {
-        setCardBalance(data.data)
+    const getBalance = async () => {
+      const response = await fetch('http://localhost:3000/api/balance', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
       })
-      .catch(error => {
-        console.log(error)
-      })
+
+      if (response.status === 401) {
+        router.push('/login')
+        return
+      }
+
+      const data = await response.json()
+      setCardBalance(data.data)
+    }
+    getBalance()
   }, [])
   
   return { CardBalance }

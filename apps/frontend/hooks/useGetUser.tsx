@@ -1,38 +1,37 @@
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+'use client'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 type Name = {
   name: string;
 }
 
 export function useGetUser() {
-  const [user, setUser] = React.useState<Name>()
+  const [user, setUser] = useState<Name>()
   const router = useRouter()
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include'
-    })
-      .then(res => {
-       if (res.status === 401) {
-         router.push('/login')
-         return
-       }
-        return res.json()
-      }) 
-      .then(data => {
-        setUser(data.data)
+    const getUser = async () => {
+      const response = await fetch(`http://localhost:3000/api/name`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
       })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [])
   
-  return [user]
+      if (response.status === 401) {
+        router.push('/login')
+        return
+      }
+      const data = await response.json()
+      setUser(data.data)
+    }
+    getUser()
+  }, [])
+
+  
+  return { user }
 }
 
-export default useGetUser;
+export default useGetUser

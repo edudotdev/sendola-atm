@@ -1,7 +1,6 @@
-import React from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Credentials } from '@/components/molecules';
-
 
 interface Props {
   credentials: Credentials
@@ -9,8 +8,8 @@ interface Props {
 
 export function useLogin({credentials}: Props) {
   const router = useRouter()
-  const [error, setError] = React.useState<string | null>(null)
-  const [loading, setLoading] = React.useState<Boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
   
   const loginHandler = async () => {
     if (!credentials.cardNumber || !credentials.pin || credentials.pin.length !== 4) {
@@ -20,9 +19,10 @@ export function useLogin({credentials}: Props) {
       }, 2000)
       return
     }
+
     setLoading(true)
     setError(null)
-    console.log(credentials)
+
     try {  
       const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
@@ -48,7 +48,11 @@ export function useLogin({credentials}: Props) {
         return
       }
     } catch (error) {
-      console.log(error)
+      setError('Something went wrong while loging in')
+      setTimeout(() => {
+        setError(null)
+      }, 2000)
+      return
     } finally {
       setLoading(false)
     }
