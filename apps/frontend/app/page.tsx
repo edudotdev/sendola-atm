@@ -1,28 +1,35 @@
-'use client';
-import { useGetUser } from "@/hooks";
+'use client'
+import { Username } from '@/components/atoms';
 import { ATMOptionButton  } from '@/components/molecules'
 import { Header } from "@/components/organisms";
+import { useGetUser } from '@/hooks';
+
+const options = [{
+  title: 'Check Balance',
+  route: '/balance'
+}, {
+  title: 'Withdraw',
+  route: '/withdraw'
+
+}, {
+  title: 'Transactions',
+  route: '/transactions'
+}]
 
 export default function Home() {
-  const [ user ] = useGetUser()
-  console.log(user, 'user')
-  return (
-    <div className="space-y-8">
-      <Header card={'000000000000000000'} />
-      {user && 
-        <h1 className="font-semibold text-4xl text-slate-800 space-x-2">
-          <span>Hello,</span>
-          <span className="bg-gradient-to-r from-violet-600 to-violet-800 inline-block text-transparent bg-clip-text">
-            {user.name}
-          </span>
-        </h1>
-      }
+  const { user } = useGetUser()
 
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        <ATMOptionButton title="Check Balance" route="/balance" />
-        <ATMOptionButton title="Withdraw" route="/withdraw" />
-        <ATMOptionButton title="Transactions" route="/transactions" />
+  return (
+    <div className="space-y-4 sm:space-y-8 sm:px-3">
+      <Header />
+      <div className='px-3 sm:px-0 sm:space-y-8'>
+        <Username name={user?.name} />
+        <div className="flex flex-col gap-4 mt-4">
+          {options.map((option, index) => (
+            <ATMOptionButton key={index} title={option.title} route={option.route} />
+          ))}
+        </div>
       </div>
     </div>
-  );
+  )
 }

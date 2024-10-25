@@ -1,16 +1,11 @@
 import React from 'react'
-import { Logo } from '@/components/atoms/'
+import { Logo, BtnLogout } from '@/components/atoms'
 
-interface Props {
-  card?: string
-}
-
-export const Header = ({
-  card
-}: Props) => {
+export const Header = () => {
   return (
-    <div className="bg-gradient-to-br from-violet-700 to-indigo-800 w-full max-w-5xl mx-auto p-3 rounded-xl">
-      <Logo />
+    <div className="flex justify-between bg-gradient-to-br from-black to-indigo-800 w-full max-w-5xl mx-auto p-4 sm:p-5 sm:rounded-xl">
+      <Logo variant='light' width={120} />
+      <BtnLogout />
     </div>
   )
 }
