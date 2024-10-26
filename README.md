@@ -27,3 +27,9 @@ To run the project, follow these steps:
 Frontend runs at http://localhost:4000
 
 Backend runs at http://localhost:3000
+
+## **Data login**
+
+Card: 1234567890123456
+
+PIN: 1234
